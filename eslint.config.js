@@ -2,19 +2,14 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
+import prettierPlugin from 'eslint-plugin-prettier';
+import globals from 'globals';
 
 export default tseslint.config([
   { ignores: ['node_modules/**', 'dist/**'] },
   js.configs.recommended,
   {
     files: ['src/**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-    ],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -22,12 +17,7 @@ export default tseslint.config([
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: { jsx: true },
       },
-      globals: {
-        window: 'readonly',
-        document: 'readonly',
-        navigator: 'readonly',
-        console: 'readonly',
-      },
+      globals: { ...globals.browser, ...globals.es2021 },
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
@@ -54,14 +44,7 @@ export default tseslint.config([
         tsconfigRootDir: import.meta.dirname,
       },
       // globalne zmienne Node (żeby nie było no-undef na __dirname / process)
-      globals: {
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        process: 'readonly',
-        module: 'readonly',
-        require: 'readonly',
-        console: 'readonly',
-      },
+      globals: { ...globals.node, ...globals.es2021 },
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,

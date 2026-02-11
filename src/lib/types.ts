@@ -1,0 +1,120 @@
+export type Direction = 'IN' | 'OUT'
+
+export type DocumentKind =
+  | 'ar_invoice'
+  | 'ap_invoice'
+  | 'tax'
+  | 'standing_order'
+  | 'lease_instalment'
+  | 'loan_instalment'
+  | 'other'
+
+export type DocumentStatus =
+  | 'planned'
+  | 'issued'
+  | 'partial'
+  | 'paid'
+  | 'overdue'
+  | 'cancelled'
+
+export type PaymentMethod = 'transfer' | 'cash' | 'card' | 'other'
+
+export interface Document {
+  id: string
+  user_id: string
+  kind: DocumentKind
+  direction: Direction
+  status: DocumentStatus
+  number: string | null
+  title: string
+  counterparty: string | null
+  issue_date: string | null
+  due_date: string
+  amount_net: number | null
+  amount_gross: number
+  currency: string
+  notes: string | null
+  recurring_rule_id: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface DocumentLine {
+  id: string
+  document_id: string
+  description: string
+  qty: number
+  unit_price: number
+  vat_rate: number
+  amount_net: number
+  amount_gross: number
+  created_at: string
+}
+
+export interface Payment {
+  id: string
+  document_id: string
+  paid_date: string
+  amount: number
+  method: PaymentMethod
+  note: string | null
+  created_at: string
+}
+
+export interface RecurringRule {
+  id: string
+  user_id: string
+  kind: DocumentKind
+  direction: Direction
+  title: string
+  amount: number
+  currency: string
+  day_of_month: number
+  interval_months: number
+  start_date: string
+  end_date: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface CashflowEvent {
+  document_id: string
+  user_id: string
+  event_date: string
+  title: string
+  direction: Direction
+  kind: DocumentKind
+  status: DocumentStatus
+  amount: number
+  paid_amount: number
+  remaining: number
+  currency: string
+}
+
+export interface DocumentInsert {
+  kind: DocumentKind
+  direction: Direction
+  status?: DocumentStatus
+  number?: string
+  title: string
+  counterparty?: string
+  issue_date?: string
+  due_date: string
+  amount_net?: number
+  amount_gross: number
+  currency?: string
+  notes?: string
+}
+
+export interface DocumentUpdate extends Partial<DocumentInsert> {
+  id: string
+}
+
+export interface PaymentInsert {
+  document_id: string
+  paid_date: string
+  amount: number
+  method?: PaymentMethod
+  note?: string
+}

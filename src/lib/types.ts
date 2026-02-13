@@ -19,6 +19,30 @@ export type DocumentStatus =
 
 export type PaymentMethod = 'transfer' | 'cash' | 'card' | 'other'
 
+export type ReceiptForm = 'paper' | 'email' | 'national_system' | 'edi' | 'other'
+
+export interface Counterparty {
+  id: string
+  user_id: string
+  name: string
+  vat_id: string | null
+  email: string | null
+  phone: string | null
+  address: string | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface CounterpartyInsert {
+  name: string
+  vat_id?: string
+  email?: string
+  phone?: string
+  address?: string
+  notes?: string
+}
+
 export interface Document {
   id: string
   user_id: string
@@ -28,6 +52,8 @@ export interface Document {
   number: string | null
   title: string
   counterparty: string | null
+  counterparty_id: string | null
+  receipt_form: ReceiptForm | null
   issue_date: string | null
   due_date: string
   amount_net: number | null
@@ -37,6 +63,15 @@ export interface Document {
   recurring_rule_id: string | null
   created_at: string
   updated_at: string
+}
+
+export interface DocumentEnhanced extends Document {
+  counterparty_name: string | null
+  counterparty_vat_id: string | null
+  vat_amount: number | null
+  vat_percentage: number | null
+  latest_payment_date: string | null
+  total_paid: number
 }
 
 export interface DocumentLine {
@@ -117,4 +152,31 @@ export interface PaymentInsert {
   amount: number
   method?: PaymentMethod
   note?: string
+}
+
+export interface TableColumn {
+  id: string
+  table_name: string
+  column_id: string
+  label: string
+  priority: number
+  accessor: string | null
+  align: 'left' | 'right' | 'center'
+  width: string | null
+  min_screen_width: number | null
+  is_sortable: boolean
+  is_active: boolean
+  display_order: number
+  created_at: string
+  updated_at: string
+}
+
+export interface ColumnConfig {
+  id: string
+  label: string
+  priority: number
+  accessor: string | ((row: any) => any)
+  align?: 'left' | 'right' | 'center'
+  width?: string
+  formatter?: (value: any, row: any) => React.ReactNode
 }

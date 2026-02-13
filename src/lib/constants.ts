@@ -1,4 +1,4 @@
-import type { DocumentKind, DocumentStatus, Direction, PaymentMethod } from './types'
+import type { DocumentKind, DocumentStatus, Direction, PaymentMethod, ReceiptForm } from './types'
 
 export const DOCUMENT_KIND_LABELS: Record<DocumentKind, string> = {
   ar_invoice: 'Sales Invoice',
@@ -37,5 +37,13 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   transfer: 'Transfer',
   cash: 'Cash',
   card: 'Card',
+  other: 'Other',
+}
+
+export const RECEIPT_FORM_LABELS: Record<ReceiptForm, string> = {
+  paper: 'Paper',
+  email: 'Email',
+  national_system: 'National System',
+  edi: 'EDI',
   other: 'Other',
 }

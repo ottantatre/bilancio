@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabaseClient'
-import type { Document, DocumentInsert, DocumentUpdate } from '@/lib/types'
+import type { Document, DocumentEnhanced, DocumentInsert, DocumentUpdate } from '@/lib/types'
 
 export interface DocumentFilters {
   kind?: string
@@ -8,9 +8,9 @@ export interface DocumentFilters {
   search?: string
 }
 
-export async function fetchDocuments(filters?: DocumentFilters): Promise<Document[]> {
+export async function fetchDocuments(filters?: DocumentFilters): Promise<DocumentEnhanced[]> {
   let query = supabase
-    .from('documents')
+    .from('documents_enhanced')
     .select('*')
     .order('due_date', { ascending: true })
 
@@ -24,12 +24,12 @@ export async function fetchDocuments(filters?: DocumentFilters): Promise<Documen
     query = query.eq('direction', filters.direction)
   }
   if (filters?.search) {
-    query = query.or(`title.ilike.%${filters.search}%,number.ilike.%${filters.search}%,counterparty.ilike.%${filters.search}%`)
+    query = query.or(`title.ilike.%${filters.search}%,number.ilike.%${filters.search}%,counterparty.ilike.%${filters.search}%,counterparty_name.ilike.%${filters.search}%`)
   }
 
   const { data, error } = await query
   if (error) throw error
-  return data as Document[]
+  return data as DocumentEnhanced[]
 }
 
 export async function fetchDocument(id: string): Promise<Document> {
